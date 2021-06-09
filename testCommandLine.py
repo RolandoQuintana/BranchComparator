@@ -3,6 +3,8 @@ import filecmp
 from posixpath import relpath
 import pathlib
 
+print("Hello World")
+
 
 # homeDir = os.system("cd ~")
 # print("'cd ~' ran with exit code %d" %homeDir)
