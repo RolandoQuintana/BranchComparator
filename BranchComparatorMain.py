@@ -1,5 +1,5 @@
 import os
-import filecmp
+import filecmpModified
 from posixpath import relpath
 import pathlib
 
@@ -44,7 +44,7 @@ print("###############################")
 print("Test-Repository-testBranch1")
 print("###############################")
 
-dirComparison = filecmp.dircmp(pathMaster, pathBranch)
+dirComparison = filecmpModified.dircmp(pathMaster, pathBranch)
 
 dirComparison.report_full_closure()
 print(dirComparison.outReport())
