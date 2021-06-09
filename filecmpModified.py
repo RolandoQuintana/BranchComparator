@@ -11,9 +11,16 @@ Functions:
 """
 
 import os
+import pathlib
 import stat
 from itertools import filterfalse
 from types import GenericAlias
+
+addedD = {}
+subbedD = {}
+
+addedF = {}
+subbedF = {}
 
 addedDirs = []
 subbedDirs = []
@@ -210,28 +217,41 @@ class dircmp:
 
     def outReport(self):
         print("Missing Directories")
-        for item in subbedDirs:
-            print('- ' + item)
+        # for item in subbedDirs:
+        #     print('- ' + item)
+        for key in subbedD:
+            print('- ' + key + "     " + subbedD[key])
 
         print()
 
         print("Added Directories")
-        for item in addedDirs:
-            print('+ ' + item)
+        # for item in addedDirs:
+        #     print('+ ' + item)
+        for key in addedD:
+            print("+" + key + "     " + addedD[key])
 
         print()
 
         print("Missing Files")
-        for item in subbedFiles:
-            print('- ' + item)
+        # for item in subbedFiles:
+        #     print('- ' + item)
+        for key in subbedF:
+            print("- " + key + "     " + subbedF[key])
 
         print()
 
         print("Added Files")
-        for item in addedFiles:
-            print('+ ' + item)
+        # for item in addedFiles:
+        #     print('+ ' + item)
+        for key in addedF:
+            print("+ " + key + "     " + addedF[key])
 
         print()
+
+    def clipPath(self, path):
+        p = pathlib.Path(path)
+        p.parts[4:]
+        return str(pathlib.Path(*p.parts[4:]))
 
     def clearDictionaries():
         print("continue")
@@ -244,10 +264,12 @@ class dircmp:
             self.left_only.sort()
             for i in range(len(self.left_only)):
                 #print("- "+self.left_only[i])
-                if os.path.isdir(str(self.left)):
+                if os.path.isdir(str(self.left)+'/'+self.left_only[i]):
                     subbedDirs.append(self.left_only[i])
-                elif os.path.isfile(str(self.left)):
+                    subbedD[self.left_only[i]] = self.clipPath(str(self.left)+'/'+self.left_only[i])
+                elif os.path.isfile(str(self.left)+'/'+self.left_only[i]):
                     subbedFiles.append(self.left_only[i])
+                    subbedF[self.left_only[i]] = self.clipPath(str(self.left)+'/'+self.left_only[i])
             #print('Only in', os.path.basename(str(self.left)), ':', self.left_only)
         if self.right_only:
             self.right_only.sort()
@@ -255,8 +277,10 @@ class dircmp:
                 #print("+ "+self.right_only[i])
                 if os.path.isdir(str(self.right)+'/'+self.right_only[i]):
                     addedDirs.append(self.right_only[i])
+                    addedD[self.right_only[i]] = self.clipPath(str(self.right)+'/'+self.right_only[i])
                 elif os.path.isfile(str(self.right)+'/'+self.right_only[i]):
                     addedFiles.append(self.right_only[i])
+                    addedF[self.right_only[i]] = self.clipPath(str(self.right)+'/'+self.right_only[i])
             #print('Only in', self.right, ':', self.right_only)
         if self.same_files:
             self.same_files.sort()

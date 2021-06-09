@@ -37,29 +37,31 @@ pathMaster = '/Users/Rolando/Downloads/Test-Repository-main'
 #     folderReport.write('\n'+ "Only in feature Branch: "+ leftOnlyFiles+'\n')
 #     folderReport.write('\n'+ "Only in main branch: " + rightOnlyFiles+ '\n')
 
-import filecmp
-print("hello")
 
-print("###############################")
-print("Test-Repository-testBranch1")
-print("###############################")
 
 dirComparison = filecmpModified.dircmp(pathMaster, pathBranch)
-
 dirComparison.report_full_closure()
-print(dirComparison.outReport())
+
+with open(path+'BranchCompare.txt', 'w') as branchReport:
+    branchReport.write("###############################"+'\n')
+    branchReport.write("Test-Repsitory-testBranch1"+'\n')
+    branchReport.write("###############################"+'\n')
+    branchReport.write("")
+    branchReport.write("")
+
+    branchReport.write(dirComparison.outReport())
 
 
 
-# missing_from_b = folder_b - folder_a
-# missing_from_a = folder_a - folder_b
+# print("###############################")
+# print("Test-Repository-testBranch1")
+# print("###############################")
+# print()
+# print()
 
-# import csv
-# with open(path+"output.csv", "w") as f:
-#     writer = csv.writer(f, dialect='excel')
-#     writer.writerow(["Missing from Feature Branch", "Missing from Main Branch"])
-#     writer.writerows(zip(sorted(missing_from_a), sorted(missing_from_b)))
+# # dirComparison = filecmpModified.dircmp(pathMaster, pathBranch)
 
-    # f.write("Common Files: "+common_files+'\n')
-    # f.write('\n'+ "Only in feature Branch: "+ leftOnlyFiles+'\n')
-    # f.write('\n'+ "Only in main branch: " + rightOnlyFiles+ '\n')
+
+# dirComparison.report_full_closure()
+# print(dirComparison.outReport())
+
