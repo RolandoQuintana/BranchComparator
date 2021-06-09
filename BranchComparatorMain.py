@@ -10,9 +10,24 @@ import pathlib
 # unknownDir = os.system("cd doesnotexist")
 # print("'cd doesnotexist' ran with exeit cod %d" %unknownDir)
 
-path = '/Users/danie/Downloads/'
-pathBranch = '/Users/danie/Downloads/Test-Repository-testBranch1'
-pathMaster = '/Users/danie/Downloads/Test-Repository-main'
+#################################################
+#           TEST AT WORK        #
+
+path = '/Users/Rolando/Downloads/'
+pathBranch = '/Users/Rolando/Downloads/Test-Repository-testBranch1'
+pathMaster = '/Users/Rolando/Downloads/Test-Repository-main'
+
+################################################
+
+
+##################################################
+#           Test AT HOME            #
+
+# path = '/Users/danie/Downloads/'
+# pathBranch = '/Users/danie/Downloads/Test-Repository-testBranch1'
+# pathMaster = '/Users/danie/Downloads/Test-Repository-main'
+
+###################################################
 # comparison = filecmp.dircmp(path+'Test-Repository-testBranch1', path +'Test-Repository-main')
 # common_files = ', '.join(comparison.common)
 # leftOnlyFiles = ', '.join(comparison.left_only)
@@ -25,19 +40,16 @@ pathMaster = '/Users/danie/Downloads/Test-Repository-main'
 import filecmp
 print("hello")
 
-def get_files(basedir):
-    for basename, dirs, files in os.walk(basedir):
-        for dir in dirs:
-            print(basename)
-            rel = os.path.realpath(basename, pathBranch)
-            print(os.path.join(pathMaster,rel))
-            print(os.path.join(basename, dir))
-        for file in files:
-            path = os.path.join(basename, file)
-            print(path)
-            yield path[len(basedir)+1:]
+print("###############################")
+print("Test-Repository-testBranch1")
+print("###############################")
 
-mainFolder = set(get_files(path+'Test-Repository-testBranch1'))
+dirComparison = filecmp.dircmp(pathMaster, pathBranch)
+
+dirComparison.report_full_closure()
+print(dirComparison.outReport())
+
+
 
 # missing_from_b = folder_b - folder_a
 # missing_from_a = folder_a - folder_b
