@@ -215,38 +215,41 @@ class dircmp:
         for sd in self.subdirs.values():
             sd.phase4_closure()
 
-    def outReport(self):
-        print("Missing Directories")
+    def outReport(self, f):
+        print("___Missing Directories___", file=f)
         # for item in subbedDirs:
         #     print('- ' + item)
         for key in subbedD:
-            print('- ' + key + "     " + subbedD[key])
+            print('- ' + key + "     " + subbedD[key], file=f)
 
-        print()
+        print("", file=f)
 
-        print("Added Directories")
+        print("___Added Directories___", file=f)
         # for item in addedDirs:
         #     print('+ ' + item)
         for key in addedD:
-            print("+" + key + "     " + addedD[key])
+            print("+" + key + "     " + addedD[key], file=f)
 
-        print()
+        print("", file=f)
 
-        print("Missing Files")
+        print("___Missing Files___", file=f)
         # for item in subbedFiles:
         #     print('- ' + item)
         for key in subbedF:
-            print("- " + key + "     " + subbedF[key])
+            print("- " + key + "     " + subbedF[key], file=f)
 
-        print()
+        print("", file=f)
 
-        print("Added Files")
+        print("___Added Files___", file=f)
         # for item in addedFiles:
         #     print('+ ' + item)
         for key in addedF:
-            print("+ " + key + "     " + addedF[key])
+            print("+ " + key + "     " + addedF[key], file=f)
 
-        print()
+        print("", file=f)
+        print("", file=f)
+        print("", file=f)
+
 
     def clipPath(self, path):
         p = pathlib.Path(path)
