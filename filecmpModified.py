@@ -253,8 +253,8 @@ class dircmp:
 
     def clipPath(self, path):
         p = pathlib.Path(path)
-        p.parts[4:]
-        return str(pathlib.Path(*p.parts[4:]))
+        p.parts[0:]
+        return path.replace('\\', '/') #str(pathlib.Path(*p.parts[4:]))
 
     def clearDictionaries():
         print("continue")
