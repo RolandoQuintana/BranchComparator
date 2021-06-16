@@ -6,7 +6,7 @@ import getpass
 
 userName = getpass.getuser()
 repoContainerPath = "C:/Dev"
-gitRepoPath = "C:/Dev/CoreFW" 
+gitRepoPath = "C:/Dev/CoreFW"
 #gitRepoPath = "C:/Users/Rolando/Desktop/Git Repos/testgitapi"
 
 def branchTitlePrint(title):
@@ -14,12 +14,23 @@ def branchTitlePrint(title):
     print('############' + title + '############', file=f)
     print("", file=f)
 
+def changeToForwardSlash(path):
+        return path.replace('\\', '/')
 
-def setupBranchComparison():
+
+def setupBranchComparison(isCoreFW):
     #instantiate .txt file
     global f
-    f = open("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAll.txt".format(userName), 'w')
+    f = open("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAllCoreFW.txt".format(userName), 'w')
     print(".txt file created")
+
+    if (isCoreFW):
+        repoContainerPath = "C:/Dev"
+        gitRepoPath = "C:/Dev/CoreFW"
+    else:
+        gitRepoPath = input("Please enter the path location of the Repository on your computer: ")
+        gitRepoPath = changeToForwardSlash(gitRepoPath)
+        repoContainerPath = os.path.dirname(gitRepoPath)
 
     os.chdir(gitRepoPath)
 

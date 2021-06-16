@@ -25,7 +25,7 @@ def menu():
         4: Exit
 
         Please enter your choice: """)
-        if not (choice == '1' or choice == '2' or choice == '3' or choice == '4'):
+        if not (choice == '1' or choice == '2' or choice == '3' or choice == '4' or choice == '5'):
             print("Please enter valid menu selction")
             print()
         else:
@@ -33,23 +33,28 @@ def menu():
 
 
     if choice == '1':
-        if os.path.exists("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAll.txt".format(getpass.getuser)):
-            input("BranchCompareAll File already Exists. You will overide it. Press Enter to Continue")
-        BranchCompareFunctions.setupBranchComparison()
+        if os.path.exists("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAllCoreFW.txt".format(getpass.getuser())):
+            input("BranchCompareAllCoreFW File already Exists. You will overide it. Press Enter to Continue")
+        BranchCompareFunctions.setupBranchComparison(True)
         BranchCompareFunctions.runBranchComparison()
         main()
 
+    # elif choice == '2':
+    #     BranchCompareFunctions.setupBranchComparison(False)
+    #     BranchCompareFunctions.runBranchComparison()
+
     elif choice == '2':
-        if os.path.exists("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAll.txt".format(getpass.getuser)):
-            filterResultsFunctions.filterSetup()
+        if os.path.exists("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAllCoreFW.txt".format(getpass.getuser())):
+            filterResultsFunctions.filter(True)
         else:
             print('''
             BranchCompareAll.txt does not exist.
-            (will be found in C:/Users/Users/Documents/BranchCompareOutput/AllBranches)
+            (will be found in C:/Users/{}/Documents/BranchCompareOutput/AllBranches)
             You must run Option 1 first.
             
-            ''')
+            '''.format(getpass.getuser()))
         menu()
+
 
     elif choice == '3':
         print('''

@@ -1,12 +1,14 @@
 import getpass
 import os
 
+def changeToForwardSlash(path):
+        return path.replace('\\', '/')
 
-def filterSetup():
+def filter(isCoreFW):
 
     userName = getpass.getuser()
 
-    allBranchFile = open("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAll.txt".format(userName), 'r')
+    allBranchFile = open("C:/Users/{}/Documents/BranchCompareOutput/AllBranches/BranchCompareAllCoreFW.txt".format(userName), 'r')
 
     allBranchContent = allBranchFile.read()
 
@@ -15,8 +17,8 @@ def filterSetup():
         print("")
         filterFileName = input("Please input desired name of the filter results: ")
 
-        if filterFileName == "BranchCompareAll":
-            print("File name cannot be the same as BranchCompareAll")
+        if filterFileName == "BranchCompareAllCoreFW":
+            print("File name cannot be the same as BranchCompareAllCoreFW")
         
         else:
             print("")
@@ -26,9 +28,15 @@ def filterSetup():
 
     temp1 = open("C:/Users/{}/Documents/BranchCompareOutput/Filtered/temp1.txt".format(userName), 'w')
 
-    filterPath = input("Please enter the path you would like to filter: ")
+    
 
-    filterPath = "C:/Dev/CoreFW/" + filterPath
+    if isCoreFW:
+        filterPath = input("Please enter the CoreFW path you would like to filter: ")
+        filterPath = changeToForwardSlash(filterPath)
+        filterPath = "C:/Dev/CoreFW/" + filterPath
+    else:
+        filterPath = input("Please enter the full path you would like to filter i.e. C:/... : ")
+        filterPath = changeToForwardSlash(filterPath)
 
     lines = allBranchContent.split('\n')
 
