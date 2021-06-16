@@ -7,12 +7,11 @@ import getpass
 userName = getpass.getuser()
 repoContainerPath = "C:/Dev"
 gitRepoPath = "C:/Dev/CoreFW" 
+#gitRepoPath = "C:/Users/Rolando/Desktop/Git Repos/testgitapi"
 
 def branchTitlePrint(title):
     title = os.path.basename(title)
-    print("############", file=f)
-    print(title, file=f)
-    print("############", file=f)
+    print('############' + title + '############', file=f)
     print("", file=f)
 
 
@@ -34,6 +33,7 @@ def setupBranchComparison():
     if os.path.isdir(masterBranchCopyPath):
         print("No copying of Master Branch needed")
     else:
+        print("Copying Master...")
         copy_tree(gitRepoPath, masterBranchCopyPath)
         print('Master Branch Copied')
 
@@ -47,13 +47,13 @@ def runBranchComparison():
     print("There are {} branches to compare".format(len(branches)-1))
     print()
     print()
-    # input("Press Enter to start comparison process")
+    input("Press Enter to start comparison process")
     # print()
     # print()
     # print()
 
     #Loop for comparison
-    for i in range(5): #range(len(branches))
+    for i in range(len(branches)): #range(len(branches))
         if branches[i] == "master": #skip master Branch
             print("Skipped Master Branch from comparing to itself")
             continue
@@ -62,6 +62,12 @@ def runBranchComparison():
             os.system('git checkout ' + branches[i]) #checkout current branch
             
             featureBranchPath = gitRepoPath #make a Branch path to pass in just incase
+            # featureBranchPath = "C:/Dev/CoreFW/Tools/Firmware/"
+            # masterBranchCopyPath = "C:/Dev/masterCopy/Tools/Firmware/"
+
+            # featureBranchPath = "C:/Users/Rolando/Desktop/Git Repos/testgitapi"
+            # masterBranchCopyPath = "C:/Dev/masterCopyTestGit"
+            
 
             branchComparison = filecmpModified.dircmp(masterBranchCopyPath, featureBranchPath) #instantiate Comparison object with desired paths (always compare to master in this case)
             branchComparison.report_full_closure() #run full closure method from modified filcmp library

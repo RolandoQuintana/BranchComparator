@@ -197,7 +197,7 @@ class dircmp:
                 self.common_funny.append(x)
 
     def phase3(self): # Find out differences between common files
-        xx = cmpfiles(self.left, self.right, self.common_files)
+        xx = cmpfiles(self.left, self.right, self.common_files, shallow = False)
         self.same_files, self.diff_files, self.funny_files = xx
 
     def phase4(self): # Find out differences between common subdirectories
@@ -215,36 +215,44 @@ class dircmp:
         for sd in self.subdirs.values():
             sd.phase4_closure()
 
+    def addSpace(self, keyLength):
+        adjustSpace = 40
+        length = len(keyLength)
+        numSpaces = adjustSpace - length
+        spaces = ""
+        for i in range(numSpaces):
+            spaces += " "
+        return spaces
     def outReport(self, f):
-        print("___Missing Directories___", file=f)
+        print("<<<Missing Directories>>>", file=f)
         # for item in subbedDirs:
         #     print('- ' + item)
         for key in subbedD:
-            print('- ' + key + "     " + subbedD[key], file=f)
+            print('- ' + subbedD[key] + self.addSpace(subbedD[key]) + key, file=f)
 
         print("", file=f)
 
-        print("___Added Directories___", file=f)
+        print("<<<Added Directories>>>", file=f)
         # for item in addedDirs:
         #     print('+ ' + item)
         for key in addedD:
-            print("+" + key + "     " + addedD[key], file=f)
+            print("+" + addedD[key] + self.addSpace(addedD[key]) + key, file=f)
 
         print("", file=f)
 
-        print("___Missing Files___", file=f)
+        print("<<<Missing Files>>>", file=f)
         # for item in subbedFiles:
         #     print('- ' + item)
         for key in subbedF:
-            print("- " + key + "     " + subbedF[key], file=f)
+            print("- " + subbedF[key] + self.addSpace(subbedF[key]) + key, file=f)
 
         print("", file=f)
 
-        print("___Added Files___", file=f)
+        print("<<<Added Files>>>", file=f)
         # for item in addedFiles:
         #     print('+ ' + item)
         for key in addedF:
-            print("+ " + key + "     " + addedF[key], file=f)
+            print("+ " + addedF[key] + self.addSpace(addedF[key]) + key, file=f)
 
         print("", file=f)
         print("", file=f)
@@ -255,6 +263,24 @@ class dircmp:
         p = pathlib.Path(path)
         p.parts[0:]
         return path.replace('\\', '/') #str(pathlib.Path(*p.parts[4:]))
+
+    def subContentsDiffDir(self, path):
+        for root, directories, files in os.walk(path, topdown=True):
+            for name in directories:
+                subbedD[self.clipPath(os.path.join(root, name))] = name
+            for name in files:
+                subbedF[self.clipPath(os.path.join(root, name))] = name
+
+    def addContentsDiffDir(self, path):
+        for root, directories, files in os.walk(path, topdown=True):
+            for name in directories:
+                addedD[self.clipPath(os.path.join(root, name))] = name
+            for name in files:
+                addedF[self.clipPath(os.path.join(root, name))] = name
+
+
+    
+
 
     def clearDictionaries():
         print("continue")
@@ -268,28 +294,37 @@ class dircmp:
             for i in range(len(self.left_only)):
                 #print("- "+self.left_only[i])
                 if os.path.isdir(str(self.left)+'/'+self.left_only[i]):
-                    subbedDirs.append(self.left_only[i])
-                    subbedD[self.left_only[i]] = self.clipPath(str(self.left)+'/'+self.left_only[i])
+                    #subbedDirs.append(self.left_only[i])
+                    #subbedD[self.left_only[i]] = self.clipPath(str(self.left)+'/'+self.left_only[i]) #Use folder name as key
+                    subbedD[self.clipPath(str(self.left)+'/'+self.left_only[i])] = self.left_only[i] #Use Path as key
+                    self.subContentsDiffDir(str(self.left)+'/'+self.left_only[i])
+
                 elif os.path.isfile(str(self.left)+'/'+self.left_only[i]):
                     subbedFiles.append(self.left_only[i])
-                    subbedF[self.left_only[i]] = self.clipPath(str(self.left)+'/'+self.left_only[i])
+                    #subbedF[self.left_only[i]] = self.clipPath(str(self.left)+'/'+self.left_only[i]) #Use folder name as key
+                    subbedF[self.clipPath(str(self.left)+'/'+self.left_only[i])] = self.left_only[i] #Use Path as key
+
             #print('Only in', os.path.basename(str(self.left)), ':', self.left_only)
         if self.right_only:
             self.right_only.sort()
             for i in range(len(self.right_only)):
                 #print("+ "+self.right_only[i])
                 if os.path.isdir(str(self.right)+'/'+self.right_only[i]):
-                    addedDirs.append(self.right_only[i])
-                    addedD[self.right_only[i]] = self.clipPath(str(self.right)+'/'+self.right_only[i])
+                    #addedDirs.append(self.right_only[i])
+                    #addedD[self.right_only[i]] = self.clipPath(str(self.right)+'/'+self.right_only[i])
+                    addedD[self.clipPath(str(self.right)+'/'+self.right_only[i])] = self.right_only[i] #Use Path as key
+                    self.addContentsDiffDir(str(self.right)+'/'+self.right_only[i])
+                    
                 elif os.path.isfile(str(self.right)+'/'+self.right_only[i]):
                     addedFiles.append(self.right_only[i])
-                    addedF[self.right_only[i]] = self.clipPath(str(self.right)+'/'+self.right_only[i])
+                    #addedF[self.right_only[i]] = self.clipPath(str(self.right)+'/'+self.right_only[i]) #Use name as key
+                    addedF[self.clipPath(str(self.right)+'/'+self.right_only[i])] = self.right_only[i] #Use Path as key
             #print('Only in', self.right, ':', self.right_only)
-        if self.same_files:
-            self.same_files.sort()
-            for i in range(len(self.same_files)):
-                #print("o "+self.same_files[i])
-                commonFiles.append(self.same_files[i])
+        #if self.same_files:
+            # self.same_files.sort()
+            # for i in range(len(self.same_files)):
+            #     #print("o "+self.same_files[i])
+            #     commonFiles.append(self.same_files[i])
             #print('Identical files :', self.same_files)
         # if self.diff_files:
         #     self.diff_files.sort()
@@ -297,11 +332,11 @@ class dircmp:
         # if self.funny_files:
         #     self.funny_files.sort()
         #     print('Trouble with common files :', self.funny_files)
-        if self.common_dirs:
-            self.common_dirs.sort()
-            for i in range(len(self.common_dirs)):
-                #print("o "+self.common_dirs[i])
-                commonDirs.append(self.common_dirs[i])
+        # if self.common_dirs:
+        #     self.common_dirs.sort()
+        #     for i in range(len(self.common_dirs)):
+        #         #print("o "+self.common_dirs[i])
+        #         commonDirs.append(self.common_dirs[i])
             #print('Common subdirectories :', self.common_dirs)
         # if self.common_funny:
         #     self.common_funny.sort()
