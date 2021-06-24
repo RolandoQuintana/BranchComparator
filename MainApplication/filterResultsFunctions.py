@@ -33,7 +33,7 @@ def filter(isCoreFW):
     if isCoreFW:
         filterPath = input("Please enter the CoreFW path you would like to filter: ")
         filterPath = changeToForwardSlash(filterPath)
-        filterPath = "C:/Dev/CoreFW/" + filterPath
+        #filterPath = "C:/Dev/CoreFW/" + filterPath
     else:
         filterPath = input("Please enter the full path you would like to filter i.e. C:/... : ")
         filterPath = changeToForwardSlash(filterPath)
@@ -87,23 +87,26 @@ def filter(isCoreFW):
         if "#" in line:
             #print(line)
             for i in range(10):
-                if '<' in lines[index+i]:
-                    j = 0
-                    # control = 0
-                    # while j < 3:
-                    #     if lines[index+j] == "":
-                    #         print(lines[index+j])
-                    #     else:
-                    #         filterFile.write(lines[index+j] + '\n')
-                    #         print(lines[index+j])
-                    #         j += 1
+                try:
+                    if '<' in lines[index+i]:
+                        j = 0
+                        # control = 0
+                        # while j < 3:
+                        #     if lines[index+j] == "":
+                        #         print(lines[index+j])
+                        #     else:
+                        #         filterFile.write(lines[index+j] + '\n')
+                        #         print(lines[index+j])
+                        #         j += 1
 
-                    #     if j > 3:
-                    #         break
+                        #     if j > 3:
+                        #         break
 
-                    filterFile.write(lines[index] + '\n')
-                    print(lines[index])
-                    
+                        filterFile.write(lines[index] + '\n')
+                        print(lines[index])
+                        
+                        break
+                except IndexError:
                     break
         elif '~' in line:
             index += 1
@@ -122,8 +125,8 @@ def filter(isCoreFW):
     temp4.close()
     filterFile.close()
 
-    os.remove("C:/Users/Rolando/Documents/BranchCompareOutput/Filtered/temp1.txt")
-    os.remove("C:/Users/Rolando/Documents/BranchCompareOutput/Filtered/temp3.txt")
+    #os.remove("C:/Users/Rolando/Documents/BranchCompareOutput/Filtered/temp1.txt")
+    #os.remove("C:/Users/Rolando/Documents/BranchCompareOutput/Filtered/temp3.txt")
 
 
     
